@@ -4,8 +4,8 @@
   --primary-hover: #1d4ed8;
   --secondary-color: #64748b;
   --accent-color: #0ea5e9;
-  --text-primary: #1e293b;
-  --text-secondary: #64748b;
+  --text-primary: #000000;
+  --text-secondary: #000000;
   --text-light: #94a3b8;
   --background-primary: #ffffff;
   --background-secondary: #f8fafc;
@@ -26,13 +26,27 @@
 /* Smooth scrolling for better UX */
 html {
   scroll-behavior: smooth;
+  font-size: 14px;
+}
+
+.title,
+.subtitle,
+.content,
+.content h1, .content h2, .content h3,
+.content h4, .content h5, .content h6 {
+  color: var(--text-primary);
+}
+
+strong,
+.subtitle strong {
+  color: inherit;
 }
 
 body {
   font-family: 'Inter', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
   color: var(--text-primary);
   line-height: 1.6;
-  font-size: 16px;
+  font-size: 1rem;
   background-color: var(--background-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -336,7 +350,7 @@ body {
 
 /* Content Improvements */
 .content.has-text-justified {
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   line-height: 1.8;
   color: var(--text-secondary);
 }

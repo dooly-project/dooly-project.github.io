@@ -197,12 +197,12 @@
   </button>
 
   <main id="main-content">
-  <section class="hero">
+  <section class="hero" style="padding-bottom: 0;">
     <div class="hero-body">
       <div class="container is-max-widescreen">
         <div class="columns is-centered">
           <div class="column has-text-centered">
-            <a href="https://dooly-project.github.io" target="_blank"><img src="static/images/dooly-logo.png" alt="Dooly logo" style="max-width: 360px; width: 70%; height: auto; margin-bottom: 1.5rem;"></a>
+            <a href="https://dooly-project.github.io" target="_blank"><img src="static/images/dooly-logo.png" alt="Dooly logo" style="max-width: 315px; width: 70%; height: auto; margin-bottom: 1.5rem;"></a>
             <h1 class="title is-1 publication-title">Configuration-Agnostic, Redundancy-Aware Profiling for LLM Inference</h1>
             <div class="is-size-5 publication-authors">
               <span class="author-block"><a href="https://jhkjames1110.github.io/" target="_blank">Joon Ha Kim</a>,</span>
@@ -257,35 +257,98 @@
 </section>
 
 
+<!-- System overview figure -->
+<section class="section hero is-light" style="padding-top: 2rem; padding-bottom:1rem;">
+  <div class="container is-max-widescreen">
+    <h2 class="title is-3 has-text-centered">Profiling for LLM Inference</h2>
+    <div class="content has-text-justified">
+      <p>
+        LLM inference performance depends on many configuration choices, including hardware, serving engine, attention backend, and model architecture, and changing any one of them changes the latency of the underlying GPU operations.
+        Operation-level profiling captures this dependence by measuring the latency of every operation a model invokes under a given configuration, and these profiles are the building blocks for understanding and comparing performance across configurations.
+        Yet existing profilers hardcode their operation set to a specific configuration and re-profile every operation from scratch, treating each (model, engine, backend, hardware) combination as a fresh target and ignoring the substantial overlap across configurations. This makes broad configuration sweeps prohibitively expensive.
+        <!-- Simulation is a key application of these profiles: profile-based simulators replay the measured latencies to predict end-to-end serving performance, and we evaluate Dooly's profiles by using them as the backend of such a simulator. -->
+      </p>
+
+    </div>
+  </div>
+</section>
+
+<section class="section hero" style="padding-top: 2rem;">
+  <div class="container is-max-widescreen">
+    <div class="content has-text-justified">
+      <h2 class="title is-3 has-text-centered">Dooly's Approach</h2>
+      <figure class="image" style="max-width: 800px; margin: 0 auto; padding-bottom: 2rem;">
+      <img src="static/images/dooly-system.png" alt="Dooly architecture: a tainted runner, operation set finder, and duplication-aware profiler populate a latency database, which the simulation runner queries alongside the engine's scheduler to predict performance." loading="lazy">
+      </figure>
+      <!-- <h2 class="subtitle has-text-centered" style="margin-top: 1rem;">
+        DoolyProf and DoolySim system overview
+      </h2> -->
+
+      <p>
+        <strong>Dooly takes a different approach.</strong>
+        It exploits structural redundancy in LLM inference to achieve configuration-agnostic, redundancy-aware profiling, profiling each unique operation only once and reusing it across all configurations that share it.
+        Our core insight is that every input dimension of every operation in an LLM forward pass is either fixed by the model configuration or determined by the incoming request, and that model-configuration values (head size, layer count, etc.) recur heavily across model families. 
+        
+        <br><br>Dooly exploits this through three key ideas:
+        <ul>
+          <li><strong>Taint propagation for dimension provenance.</strong> Dooly performs a single inference pass and labels each input dimension of each operation with its origin (model config, request size, or derived combination) via taint propagation, exposing which operations are equivalent across configurations.</li>
+          <li><strong>Hierarchical context resolution for stateful operations.</strong> Operations like attention carry implicit state that breaks naive operation extraction. Dooly isolates these by reusing the serving engine's own initialization code, eliminating the need for manual instrumentation.</li>
+          <li><strong>Duplication-aware profiling against a persistent database.</strong> Dooly generates kernel-aware signatures for each operation and only profiles operations absent from its latency database, enabling cumulative reuse across runs and configurations.</li>
+        </ul>
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section hero is-light" style="padding-top: 2rem;">
+  <div class="container is-max-widescreen">
+    <div class="content has-text-justified">
+      <h2 class="title is-3 has-text-centered">Application of Dooly</h2>
+      <p>
+        To evaluate the accuracy of Dooly's profiling approach, we introduce DoolySim, a profile-based simulation framework that leverages the latency database populated by DoolyProf to predict and analyze the performance of LLM inference under various configurations.
+        <strong>Dooly can be applied to any LLM inference scenario to reduce profiling overhead and improve performance prediction accuracy.</strong>
+        Examples include:
+        <ul>
+          <li>Profile-based LLM inference simulators (e.g., DoolySim, Vidur, LLMServingSim) </li>
+          <li>Latency-prediction based LLM Scheduling (e.g., Google's <b><a href="https://llm-d.ai/blog/predicted-latency-based-scheduling-for-llms">llm-d</a></b>)</li>
+          <li>Benchmarking for LLM inference kernel optimizations</li>
+        </ul>
+      </p>
+    </div>
+  </div>
+</section>
+<!-- End system overview figure -->
+
 <!-- Teaser videos -->
-<section class="hero teaser">
+<section class="section hero" style="padding-top: 2rem;">
   <div class="container">
-    <div class="hero-body">
-      <div class="columns is-centered">
-        <div class="column is-half">
-          <video poster="" id="tree" controls muted loop playsinline preload="metadata" style="width: 100%; height: auto;">
-            <source src="static/videos/dooly-demo.mp4" type="video/mp4">
-          </video>
-          <h2 class="subtitle has-text-centered">
-            Dooly reduces profiling overhead by 56.4% by detecting common operations across different LLM deployment configurations.
-          </h2>
+    <div>
+        <h2 class="title is-3 has-text-centered">Demo</h2>
+        <div class="columns is-centered">
+          <div class="column is-half">
+            <video poster="" id="tree" controls muted loop playsinline preload="metadata" style="width: 100%; height: auto;">
+              <source src="static/videos/dooly-demo.mp4" type="video/mp4">
+            </video>
+            <h2 class="subtitle has-text-centered">
+              Dooly reduces profiling overhead by 56.4% by detecting common operations across different LLM deployment configurations.
+            </h2>
+          </div>
+          <div class="column is-half">
+            <video poster="" id="doolysim-demo" controls muted loop playsinline preload="metadata" style="width: 100%; height: auto;">
+              <source src="static/videos/doolysim-demo.mp4" type="video/mp4">
+            </video>
+            <h2 class="subtitle has-text-centered">
+              DoolySim achieves accurate latency prediction <b>(TTFT: 5% MAPE; TPOT: 8% MAPE)</b> by emulating the target inference engine.
+            </h2>
+          </div>
         </div>
-        <div class="column is-half">
-          <video poster="" id="doolysim-demo" controls muted loop playsinline preload="metadata" style="width: 100%; height: auto;">
-            <source src="static/videos/doolysim-demo.mp4" type="video/mp4">
-          </video>
-          <h2 class="subtitle has-text-centered">
-            DoolySim achieves accurate latency prediction <b>(TTFT: 5% MAPE; TPOT: 8% MAPE)</b> by emulating the target inference engine.
-          </h2>
-        </div>
-      </div>
     </div>
   </div>
 </section>
 <!-- End teaser videos -->
 
 <!-- Paper abstract -->
-<section class="section hero is-light">
+<!-- <section class="section hero">
   <div class="container is-max-widescreen">
     <div class="columns is-centered has-text-centered">
       <div class="column">
@@ -296,13 +359,18 @@
             Profile-based simulators are the standard tool, yet they hardcode their operation set to a specific configuration and re-profile every operation from scratch, making exploration prohibitively expensive. 
             This cost stems from a missing structural understanding: every input dimension of each operation is fixed by the model configuration or determined by the incoming request. 
             Many model-configuration values (e.g., head size, layer count) recur across models, so the same operation runs in many configurations; a single sweep over the request-dependent dimensions can serve them all. 
-            We present Dooly, which exploits this structure to achieve configuration-agnostic, redundancy-aware profiling. Dooly performs a single inference pass, labels each input dimension with its origin via taint propagation, and selectively profiles only operations absent from its latency database; stateful operations such as attention are isolated by reusing the serving engine's own initialization code, eliminating manual instrumentation. It builds latency regression models based on the database, which becomes a drop-in backend for existing simulators. Across two GPU platforms, three attention backends, and diverse model architectures, Dooly achieves simulation accuracy within 5% MAPE for TTFT and 8% for TPOT while reducing profiling GPU-hours by 56.4% across 12 models compared to the existing profiling approach.
+          </p>
+          <p>
+            We present Dooly, which exploits this structure to achieve configuration-agnostic, redundancy-aware profiling. 
+            Dooly performs a single inference pass, labels each input dimension with its origin via taint propagation, and selectively profiles only operations absent from its latency database; stateful operations such as attention are isolated by reusing the serving engine's own initialization code, eliminating manual instrumentation. 
+            It builds latency regression models based on the database, which becomes a drop-in backend for existing simulators. 
+            Across two GPU platforms, three attention backends, and diverse model architectures, Dooly achieves simulation accuracy within 5% MAPE for TTFT and 8% for TPOT while reducing profiling GPU-hours by 56.4% across 12 models compared to the existing profiling approach.
           </p>
         </div>
       </div>
     </div>
   </div>
-</section>
+</section> -->
 <!-- End paper abstract -->
 
 <!--BibTex citation -->
