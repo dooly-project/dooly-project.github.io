@@ -31,8 +31,10 @@ document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape') {
         const dropdown = document.getElementById('moreWorksDropdown');
         const button = document.querySelector('.more-works-btn');
-        dropdown.classList.remove('show');
-        button.classList.remove('active');
+        if (dropdown && button) {
+            dropdown.classList.remove('show');
+            button.classList.remove('active');
+        }
     }
 });
 

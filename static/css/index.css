@@ -152,14 +152,18 @@ body {
 }
 
 .publication-venue {
-    color: var(--text-secondary);
+    font-family: 'Inter', sans-serif;
+    color: var(--primary-color);
     width: fit-content;
-    font-weight: 600;
-    background: var(--background-accent);
-    padding: 0.5rem 1rem;
-    border-radius: var(--border-radius);
-    margin-top: 1rem;
-    display: inline-block;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    background: #eff6ff;
+    border: 2px solid var(--primary-color);
+    padding: 0.5rem 1.5rem;
+    border-radius: 999px;
+    margin: 0 auto 1.5rem;
+    display: block;
 }
 
 .publication-awards {
@@ -188,7 +192,7 @@ body {
     height: 2px;
     bottom: -2px;
     left: 0;
-    background: var(--gradient-accent);
+    background: var(--primary-color);
     transition: var(--transition);
 }
 
