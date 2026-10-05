@@ -70,14 +70,12 @@
   <link rel="preload" href="static/css/bulma-carousel.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <link rel="preload" href="static/css/bulma-slider.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <link rel="preload" href="static/css/fontawesome.all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <link rel="preload" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
   
   <!-- Fallback for browsers that don't support preload -->
   <noscript>
     <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
     <link rel="stylesheet" href="static/css/bulma-slider.min.css">
     <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
   </noscript>
   
   <!-- Fonts - Optimized loading -->
@@ -238,16 +236,6 @@
                     <span>Code</span>
                   </a>
                 </span>
-
-                <span class="link-block">
-                  <a href="https://arxiv.org/abs/2605.07985" target="_blank"
-                  class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                    <i class="ai ai-arxiv"></i>
-                  </span>
-                  <span>arXiv</span>
-                </a>
-              </span>
             </div>
           </div>
         </div>
@@ -260,7 +248,7 @@
 <!-- System overview figure -->
 <section class="section hero is-light" style="padding-top: 2rem; padding-bottom:1rem;">
   <div class="container is-max-widescreen">
-    <h2 class="title is-3 has-text-centered">Profiling for LLM Inference</h2>
+    <h2 class="title is-3 has-text-centered">Problem Statement</h2>
     <div class="content has-text-justified">
       <p>
         LLM inference performance depends on many configuration choices, including hardware, serving engine, attention backend, and model architecture, and changing any one of them changes the latency of the underlying GPU operations.
@@ -285,8 +273,7 @@
       </h2> -->
 
       <p>
-        <strong>Dooly takes a different approach.</strong>
-        It exploits structural redundancy in LLM inference to achieve configuration-agnostic, redundancy-aware profiling, profiling each unique operation only once and reusing it across all configurations that share it.
+        <strong>Dooly exploits structural redundancy in LLM inference</strong> to achieve configuration-agnostic, redundancy-aware profiling, profiling each unique operation only once and reusing it across all configurations that share it.
         Our core insight is that every input dimension of every operation in an LLM forward pass is either fixed by the model configuration or determined by the incoming request, and that model-configuration values (head size, layer count, etc.) recur heavily across model families. 
         
         <br><br>Dooly exploits this through three key ideas:
