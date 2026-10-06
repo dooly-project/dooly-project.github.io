@@ -273,7 +273,7 @@
       </h2> -->
 
       <p>
-        <strong>Dooly exploits structural redundancy in LLM inference</strong> to achieve configuration-agnostic, redundancy-aware profiling, profiling each unique operation only once and reusing it across all configurations that share it.
+        <strong>Dooly exploits structural redundancy in LLM models</strong> to achieve configuration-agnostic, redundancy-aware profiling, <strong>profiling each unique operation only once and reusing it across all configurations that share it</strong>.
         Our core insight is that every input dimension of every operation in an LLM forward pass is either fixed by the model configuration or determined by the incoming request, and that model-configuration values (head size, layer count, etc.) recur heavily across model families. 
         
         <br><br>Dooly exploits this through three key ideas:
