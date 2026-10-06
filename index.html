@@ -265,13 +265,9 @@
   <div class="container is-max-widescreen">
     <div class="content has-text-justified">
       <h2 class="title is-3 has-text-centered">Dooly's Approach</h2>
-      <figure class="image" style="max-width: 800px; margin: 0 auto; padding-bottom: 2rem;">
-      <img src="static/images/dooly-system.png" alt="Dooly architecture: a tainted runner, operation set finder, and duplication-aware profiler populate a latency database, which the simulation runner queries alongside the engine's scheduler to predict performance." loading="lazy">
-      </figure>
-      <!-- <h2 class="subtitle has-text-centered" style="margin-top: 1rem;">
-        DoolyProf and DoolySim system overview
-      </h2> -->
-
+      <figure class="image" style="max-width: 1300px; margin: 0 auto; padding-top: 0rem; padding-bottom: 2rem;">
+      <img src="static/images/dooly-system.png" alt="Dooly architecture: a tainted runner, operation set finder, and duplication-aware profiler populate a latency database" loading="lazy">
+      </figure> 
       <p>
         <strong>Dooly exploits structural redundancy in LLM models</strong> to achieve configuration-agnostic, redundancy-aware profiling, <strong>profiling each unique operation only once and reusing it across all configurations that share it</strong>.
         Our core insight is that every input dimension of every operation in an LLM forward pass is either fixed by the model configuration or determined by the incoming request, and that model-configuration values (head size, layer count, etc.) recur heavily across model families. 
