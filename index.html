@@ -287,10 +287,13 @@
   <div class="container is-max-widescreen">
     <div class="content has-text-justified">
       <h2 class="title is-3 has-text-centered">Application of Dooly</h2>
+      <figure class="image" style="max-width: 1300px; margin: 0 auto; padding-bottom: 2rem;">
+      <img src="static/images/doolysim-system.png" alt="DoolySim architecture: an emulated serving engine feeds batches to a step-time predictor built from Dooly's latency database" loading="lazy">
+      </figure>
       <p>
         To evaluate the accuracy of Dooly's profiling approach, we introduce DoolySim, a profile-based simulation framework that leverages the latency database populated by Dooly, to predict and analyze the performance of LLM inference under various configurations.
-        <strong>Dooly can be applied to any LLM inference scenario to reduce profiling overhead and improve performance prediction accuracy.</strong>
-        Examples include:
+        <strong>Dooly can be applied to any LLM inference scenario to reduce profiling overhead.</strong>
+        Use cases of Dooly are as follows:
         <ul>
           <li>Profile-based LLM inference simulators (e.g., DoolySim, Vidur, LLMServingSim) </li>
           <li>Latency-prediction based LLM scheduling (e.g., Google's <b><a href="https://llm-d.ai/blog/predicted-latency-based-scheduling-for-llms">llm-d</a></b>)</li>
