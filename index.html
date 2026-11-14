@@ -226,12 +226,22 @@
                   <div class="column has-text-centered">
                     <div class="publication-links">
                       <span class="link-block">
-                        <a href="https://github.com/dooly-project" target="_blank"
+                        <a href="https://github.com/dooly-project/doolyprof" target="_blank"
                         class="external-link button is-normal is-rounded is-dark">
                         <span class="icon">
                           <i class="fab fa-github"></i>
                         </span>
-                        <span>Code</span>
+                        <span>DoolyProf</span>
+                      </a>
+                    </span>
+
+                      <span class="link-block">
+                        <a href="https://github.com/dooly-project/doolysim" target="_blank"
+                        class="external-link button is-normal is-rounded is-dark">
+                        <span class="icon">
+                          <i class="fab fa-github"></i>
+                        </span>
+                        <span>DoolySim</span>
                       </a>
                     </span>
                     
@@ -299,6 +309,9 @@
           <li><strong>Duplication-aware profiling against a persistent database.</strong> Dooly generates kernel-aware signatures for each operation and only profiles operations absent from its latency database, enabling cumulative reuse across runs and configurations.</li>
         </ul>
       </p>
+      <p>
+        Dooly's profiler is open-sourced as <a href="https://github.com/dooly-project/doolyprof" target="_blank"><strong>DoolyProf</strong></a>.
+      </p>
     </div>
   </div>
 </section>
@@ -306,27 +319,71 @@
 <section class="section hero is-light" style="padding-top: 2rem;">
   <div class="container is-max-widescreen">
     <div class="content has-text-justified">
+      <h2 class="title is-3 has-text-centered">Profiling Cost</h2>
+      <div class="columns result-stats">
+        <div class="column has-text-centered">
+          <p class="result-number">56.4%</p>
+          <p class="result-label">fewer profiling GPU-hours<br>vs. profiling each configuration from scratch</p>
+        </div>
+        <div class="column has-text-centered">
+          <p class="result-number">100 / 612</p>
+          <p class="result-label">operation signatures are unique<br>across 36 configurations</p>
+        </div>
+        <div class="column has-text-centered">
+          <p class="result-number">&lt;0.2 GPU-h</p>
+          <p class="result-label">of new profiling per model<br>after the first 4 models</p>
+        </div>
+      </div>
+      <p>
+        Across 12 models with three attention backends each, Dooly reuses a measurement only when two operations match on model-derived dimensions,
+        dispatched GPU kernels, and module state (e.g., sliding-window size), so each unique operation is profiled exactly once.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section hero" style="padding-top: 2rem;">
+  <div class="container is-max-widescreen">
+    <div class="content has-text-justified">
       <h2 class="title is-3 has-text-centered">Application of Dooly</h2>
       <figure class="image" style="max-width: 1300px; margin: 0 auto; padding-bottom: 2rem;">
       <img src="static/images/doolysim-system.png" alt="DoolySim architecture: an emulated serving engine feeds batches to a step-time predictor built from Dooly's latency database" loading="lazy">
       </figure>
       <p>
-        To evaluate the accuracy of Dooly's profiling approach, we introduce DoolySim, a profile-based simulation framework that leverages the latency database populated by Dooly, to predict and analyze the performance of LLM inference under various configurations.
-        <strong>Dooly can be applied to any LLM inference scenario to reduce profiling overhead.</strong>
-        Use cases of Dooly are as follows:
-        <ul>
-          <li>Profile-based LLM inference simulators (e.g., DoolySim, Vidur, LLMServingSim) </li>
-          <li>Latency-prediction based LLM scheduling (e.g., <a href="https://llm-d.ai/blog/predicted-latency-based-scheduling-for-llms">llm-d</a>)</li>
-          <li>Benchmarking for LLM inference kernel optimizations</li>
-        </ul>
+        To evaluate Dooly end to end, we built <a href="https://github.com/dooly-project/doolysim" target="_blank">DoolySim</a>, a profile-based simulator that reuses the serving engine's own scheduler
+        and predicts per-iteration latency from regression models trained on Dooly's latency database.
+        Comparing its predictions against real vLLM runs checks that per-operation profiles add up to correct serving latency:
       </p>
+      <div class="columns result-stats">
+        <div class="column has-text-centered">
+          <p class="result-number">5%</p>
+          <p class="result-label">TTFT MAPE<br>vs. real vLLM runs</p>
+        </div>
+        <div class="column has-text-centered">
+          <p class="result-number">8%</p>
+          <p class="result-label">TPOT MAPE<br>vs. real vLLM runs</p>
+        </div>
+        <div class="column has-text-centered">
+          <p class="result-number">&lt;0.5%</p>
+          <p class="result-label">MAPE in reproducing<br>vLLM's batch scheduling</p>
+        </div>
+      </div>
+      <p>
+        The database is not tied to DoolySim: any task that needs operation-level latencies across many configurations can draw on it.
+        Dooly's design also supports the following uses, which we have not yet evaluated:
+      </p>
+      <ul>
+        <li><strong>Existing profile-based simulators</strong> (e.g., Vidur, LLMServingSim) can train their latency models on Dooly's database as a drop-in replacement for their own profiling stage.</li>
+        <li><strong>Latency-prediction-based scheduling</strong> (e.g., <a href="https://llm-d.ai/blog/predicted-latency-based-scheduling-for-llms" target="_blank">llm-d</a>), which routes each request to the server with the lowest predicted latency: measurements profiled once can be reused across servers running different models, GPUs, and configurations.</li>
+        <li><strong>Benchmarking new model configurations</strong> that share operations with previously profiled ones, without profiling them from scratch.</li>
+      </ul>
     </div>
   </div>
 </section>
 <!-- End system overview figure -->
 
 <!-- Teaser videos -->
-<section class="section hero" style="padding-top: 2rem;">
+<section class="section hero is-light" style="padding-top: 2rem;">
   <div class="container">
     <div>
         <h2 class="title is-3 has-text-centered">Demo</h2>
@@ -336,7 +393,7 @@
               <source src="static/videos/dooly-demo.mp4" type="video/mp4">
             </video>
             <h2 class="subtitle has-text-centered">
-              Dooly reduces profiling overhead by 56.4% by detecting common operations across different LLM deployment configurations.
+              Dooly cuts profiling GPU-hours by 56.4% across 12 models, compared to profiling each configuration from scratch, by profiling operations shared across configurations only once.
             </h2>
           </div>
           <div class="column is-half">
@@ -344,7 +401,7 @@
               <source src="static/videos/doolysim-demo.mp4" type="video/mp4">
             </video>
             <h2 class="subtitle has-text-centered">
-              DoolySim achieves accurate latency prediction <b>(TTFT: 5% MAPE; TPOT: 8% MAPE)</b> by emulating the target inference engine.
+              Driven by Dooly's latency database, DoolySim emulates the target serving engine and predicts latency within <b>5% MAPE (TTFT) and 8% MAPE (TPOT)</b>.
             </h2>
           </div>
         </div>
