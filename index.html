@@ -226,22 +226,12 @@
                   <div class="column has-text-centered">
                     <div class="publication-links">
                       <span class="link-block">
-                        <a href="https://github.com/dooly-project/doolyprof" target="_blank"
+                        <a href="https://github.com/dooly-project/dooly" target="_blank"
                         class="external-link button is-normal is-rounded is-dark">
                         <span class="icon">
                           <i class="fab fa-github"></i>
                         </span>
-                        <span>DoolyProf</span>
-                      </a>
-                    </span>
-
-                      <span class="link-block">
-                        <a href="https://github.com/dooly-project/doolysim" target="_blank"
-                        class="external-link button is-normal is-rounded is-dark">
-                        <span class="icon">
-                          <i class="fab fa-github"></i>
-                        </span>
-                        <span>DoolySim</span>
+                        <span>Code</span>
                       </a>
                     </span>
                     
@@ -310,7 +300,7 @@
         </ul>
       </p>
       <p>
-        Dooly's profiler is open-sourced as <a href="https://github.com/dooly-project/doolyprof" target="_blank"><strong>DoolyProf</strong></a>.
+        Dooly's profiler is open-sourced as <a href="https://github.com/dooly-project/dooly/tree/main/doolyprof" target="_blank"><strong>DoolyProf</strong></a>.
       </p>
     </div>
   </div>
@@ -350,7 +340,7 @@
       <img src="static/images/doolysim-system.png" alt="DoolySim architecture: an emulated serving engine feeds batches to a step-time predictor built from Dooly's latency database" loading="lazy">
       </figure>
       <p>
-        To evaluate Dooly end to end, we built <a href="https://github.com/dooly-project/doolysim" target="_blank">DoolySim</a>, a profile-based simulator that reuses the serving engine's own scheduler
+        To evaluate Dooly end to end, we built <a href="https://github.com/dooly-project/dooly/tree/main/doolysim" target="_blank">DoolySim</a>, a profile-based simulator that reuses the serving engine's own scheduler
         and predicts per-iteration latency from regression models trained on Dooly's latency database.
         Comparing its predictions against real vLLM runs checks that per-operation profiles add up to correct serving latency:
       </p>
